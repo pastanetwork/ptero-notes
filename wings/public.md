@@ -1,31 +1,103 @@
 > [!NOTE]
 > All of the endpoints listed in this document use custom authorization methods which are specified under each endpoint.
 
-### `GET /download/backup`
+### `HEAD /download/backup`
 
-Returns a multipart form-data response containing the volume files for a server backup. The `token` query parameter is required for this endpoint. It is a JWT token comprised of the following claims:
+Returns headers for a server backup file without downloading the content. Supports Range requests via the `Accept-Ranges: bytes` header. The `token` query parameter is required for this endpoint. It is a JWT token comprised of the following claims:
 
 - `server_uuid`: the UUID of the server in the panel
 - `backup_uuid`: the UUID of the backup to download
 - `unique_id`: a randomly generated string
 
+### Responses
+
+| Code | Description                   |
+| ---- | ----------------------------- |
+| 200  | The request was successful.   |
+| 404  | The backup was not found.     |
+
 Sources:
 
+- [router/router_download.go#L100](https://github.com/pastanetwork/wings/blob/develop/router/router_download.go#L100)
+- [tokens/backup.go](https://github.com/pastanetwork/wings/blob/develop/router/tokens/backup.go)
+
+### `GET /download/backup`
+
+Returns the backup file for download. This endpoint now supports HTTP Range requests for resumable downloads and partial content delivery. The `token` query parameter is required for this endpoint. It is a JWT token comprised of the following claims:
+
+- `server_uuid`: the UUID of the server in the panel
+- `backup_uuid`: the UUID of the backup to download
+- `unique_id`: a randomly generated string
+
+### Headers
+
+| Name  | Visibility | Description                                                                          |
+| ----- | ---------- | ------------------------------------------------------------------------------------ |
+| Range | optional   | HTTP Range header for partial content requests (e.g., "bytes=0-1023" or "bytes=500-"). |
+
+### Responses
+
+| Code | Description                                   |
+| ---- | --------------------------------------------- |
+| 200  | The full file was returned successfully.      |
+| 206  | Partial content was returned (Range request). |
+| 404  | The backup was not found.                     |
+| 416  | The requested range is not satisfiable.       |
+
+Sources:
+
+- [router/router_download.go#L157](https://github.com/pastanetwork/wings/blob/develop/router/router_download.go#L157)
 - [DownloadLinkService.php](https://github.com/pterodactyl/panel/blob/release/v1.11.3/app/Services/Backups/DownloadLinkService.php)
-- [tokens/backup.go](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/tokens/backup.go)
+- [tokens/backup.go](https://github.com/pastanetwork/wings/blob/develop/router/tokens/backup.go)
 
-### `GET /download/file`
+### `HEAD /download/file`
 
-Returns a multipart form-data response containing a file from a server volume. The `token` query parameter is required for this endpoint. It is a JWT token comprised of the following claims:
+Returns headers for a server file without downloading the content. Supports Range requests via the `Accept-Ranges: bytes` header. The `token` query parameter is required for this endpoint. It is a JWT token comprised of the following claims:
 
 - `file_path`: the URL-decoded file path
 - `server_uuid`: the UUID of the server in the panel
 - `unique_id`: a randomly generated string
 
+### Responses
+
+| Code | Description                   |
+| ---- | ----------------------------- |
+| 200  | The request was successful.   |
+| 404  | The file was not found.       |
+
 Sources:
 
+- [router/router_download.go#L260](https://github.com/pastanetwork/wings/blob/develop/router/router_download.go#L260)
+- [tokens/file.go](https://github.com/pastanetwork/wings/blob/develop/router/tokens/file.go)
+
+### `GET /download/file`
+
+Returns a file from a server volume. This endpoint now supports HTTP Range requests for resumable downloads and partial content delivery. The `token` query parameter is required for this endpoint. It is a JWT token comprised of the following claims:
+
+- `file_path`: the URL-decoded file path
+- `server_uuid`: the UUID of the server in the panel
+- `unique_id`: a randomly generated string
+
+### Headers
+
+| Name  | Visibility | Description                                                                          |
+| ----- | ---------- | ------------------------------------------------------------------------------------ |
+| Range | optional   | HTTP Range header for partial content requests (e.g., "bytes=0-1023" or "bytes=500-"). |
+
+### Responses
+
+| Code | Description                                   |
+| ---- | --------------------------------------------- |
+| 200  | The full file was returned successfully.      |
+| 206  | Partial content was returned (Range request). |
+| 404  | The file was not found.                       |
+| 416  | The requested range is not satisfiable.       |
+
+Sources:
+
+- [router/router_download.go#L306](https://github.com/pastanetwork/wings/blob/develop/router/router_download.go#L306)
 - [FileController.php#L77](https://github.com/pterodactyl/panel/blob/release/v1.11.3/app/Http/Controllers/Api/Client/Servers/FileController.php#L77)
-- [tokens/file.go](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/tokens/file.go)
+- [tokens/file.go](https://github.com/pastanetwork/wings/blob/develop/router/tokens/file.go)
 
 ### `POST /upload/file`
 
@@ -64,9 +136,9 @@ You can optionally include:
 
 Sources:
 
+- [router/router_server_files.go#L573](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go#L573)
 - [FileUploadController.php#L40](https://github.com/pterodactyl/panel/blob/release/v1.11.3/app/Http/Controllers/Api/Client/Servers/FileUploadController.php#L40)
-- [router_server_files.go#L543](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server_files.go#L543)
-- [tokens/upload.go](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/tokens/upload.go)
+- [tokens/upload.go](https://github.com/pastanetwork/wings/blob/develop/router/tokens/upload.go)
 
 ### `GET /api/servers/:uuid/ws`
 
@@ -85,4 +157,4 @@ Handles the incoming transfer request from another Wings instance (the source no
 
 Sources:
 
-- [router_transfer.go](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_transfer.go)
+- [router/router_transfer.go#L29](https://github.com/pastanetwork/wings/blob/develop/router/router_transfer.go#L29)

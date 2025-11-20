@@ -42,10 +42,14 @@ Websocket payloads will always have the event name, but the event arguments can 
 | ------------------------ | -------------------- | ---------------------------------------------------------- |
 | auth success             |                      | The authentication was successful.                         |
 | backup complete          |                      | Sent when a backup is complete.                            |
+| backup deleted           |                      | Sent when a backup has been deleted.                       |
 | backup restore completed |                      | Sent when a backup has been restored to the server.        |
+| backup restore started   |                      | Sent when a backup restoration process starts.             |
+| backup started           |                      | Sent when a backup process starts.                         |
 | console output           | the output message   | The output from the console (one line).                    |
 | daemon error             | the error message    | The daemon recieved an error (usually with the websocket). |
 | daemon message           | the message          | A message from the daemon.                                 |
+| deleted                  |                      | Sent when the server has been deleted.                     |
 | install completed        |                      | Sent when a server's installation process is complete.     |
 | install output           | the output message   | The output from the installation process.                  |
 | install started          |                      | Sent when a server's installation process starts.          |

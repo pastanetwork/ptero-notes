@@ -13,11 +13,11 @@ Returns a server object by its UUID.
 
 Sources:
 
-- [router/router_server.go#L21](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server.go#L21)
+- [router/router_server.go#L25](https://github.com/pastanetwork/wings/blob/develop/router/router_server.go#L25)
 
 ### `DELETE /api/servers/:uuid`
 
-Deletes a specified server by its UUID and removes all the files in the server's volume on the node.
+Deletes a specified server by its UUID and removes all the files in the server's volume on the node. If configured, this endpoint will also automatically remove all backups associated with the server from the backup directory.
 
 ### Responses
 
@@ -28,7 +28,7 @@ Deletes a specified server by its UUID and removes all the files in the server's
 
 Sources:
 
-- [router/router_server.go#L192](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server.go#L192)
+- [router/router_server.go#L225](https://github.com/pastanetwork/wings/blob/develop/router/router_server.go#L225)
 
 ### `GET /api/servers/:uuid/logs`
 
@@ -50,7 +50,23 @@ Returns an object containing a list of logs from the server's console.
 
 Sources:
 
-- [router/router_server.go#L26](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server.go#L26)
+- [router/router_server.go#L30](https://github.com/pastanetwork/wings/blob/develop/router/router_server.go#L30)
+
+### `GET /api/servers/:uuid/install-logs`
+
+Returns the installation logs for a server. The response contains only the script output section of the installation log file. If the script output section header is not found, the entire log file content is returned.
+
+### Responses
+
+| Code | Description                              |
+| ---- | ---------------------------------------- |
+| 200  | The request was successful.              |
+| 404  | The server was not found.                |
+| 500  | The installation log could not be read.  |
+
+Sources:
+
+- [router/router_server.go#L53](https://github.com/pastanetwork/wings/blob/develop/router/router_server.go#L53)
 
 ### `POST /api/servers/:uuid/power`
 
@@ -61,20 +77,20 @@ Updates the power state of a server. The `action` field must be either "start", 
 | Field        | Visibility | Type    | Description                                                    |
 | ------------ | ---------- | ------- | -------------------------------------------------------------- |
 | action       | required   | string  | The power action to set.                                       |
-| wait_seconds | required   | integer | The amount of wait time to allow when setting the power state. |
+| wait_seconds | optional   | integer | The amount of wait time to allow when setting the power state. |
 
 ### Responses
 
 | Code | Description                              |
 | ---- | ---------------------------------------- |
-| 204  | The request was successful.              |
+| 202  | The request was accepted.                |
 | 400  | The request body could not be parsed.    |
 | 404  | The server was not found.                |
 | 422  | The request body could not be validated. |
 
 Sources:
 
-- [router/router_server.go#L53](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server.go#L53)
+- [router/router_server.go#L86](https://github.com/pastanetwork/wings/blob/develop/router/router_server.go#L86)
 
 ### `POST /api/servers/:uuid/commands`
 
@@ -97,31 +113,7 @@ Sends one or more commands to the server console.
 
 Sources:
 
-- [router/router_server.go#L108](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server.go#L108)
-
-### `POST /api/servers/:uuid/install`
-
-Triggers the install process of a server and returns no content.
-
-Sources:
-
-- [router/router_server.go#L153](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server.go#L153)
-
-### `POST /api/servers/:uuid/reinstall`
-
-Triggers the reinstall process for a server.
-
-### Responses
-
-| Code | Description                                       |
-| ---- | ------------------------------------------------- |
-| 204  | The request was successful.                       |
-| 404  | The server was not found.                         |
-| 409  | Another power action is currently being executed. |
-
-Sources:
-
-- [router/router_server.go#L172](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server.go#L172)
+- [router/router_server.go#L141](https://github.com/pastanetwork/wings/blob/develop/router/router_server.go#L141)
 
 ### `POST /api/servers/:uuid/sync`
 
@@ -132,12 +124,43 @@ Triggers the synchronize process of the server on the panel and the node.
 | Code | Description                                      |
 | ---- | ------------------------------------------------ |
 | 204  | The request was successful.                      |
-| 400  | An error occured while synchronizing the server. |
+| 400  | An error occurred while synchronizing the server. |
 | 404  | The server was not found.                        |
 
 Sources:
 
-- [router/router_server.go#L142](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server.go#L142)
+- [router/router_server.go#L175](https://github.com/pastanetwork/wings/blob/develop/router/router_server.go#L175)
+
+### `POST /api/servers/:uuid/install`
+
+Triggers the install process of a server and returns no content. The installation process runs in the background.
+
+### Responses
+
+| Code | Description               |
+| ---- | ------------------------- |
+| 202  | The request was accepted. |
+| 404  | The server was not found. |
+
+Sources:
+
+- [router/router_server.go#L186](https://github.com/pastanetwork/wings/blob/develop/router/router_server.go#L186)
+
+### `POST /api/servers/:uuid/reinstall`
+
+Triggers the reinstall process for a server. The reinstallation process runs in the background.
+
+### Responses
+
+| Code | Description                                       |
+| ---- | ------------------------------------------------- |
+| 202  | The request was accepted.                         |
+| 404  | The server was not found.                         |
+| 409  | Another power action is currently being executed. |
+
+Sources:
+
+- [router/router_server.go#L205](https://github.com/pastanetwork/wings/blob/develop/router/router_server.go#L205)
 
 ### `POST /api/servers/:uuid/ws/deny`
 
@@ -159,4 +182,4 @@ Adds the given JWT IDs (or "jti"s) to the server websocket's deny list, preventi
 
 Sources:
 
-- [router/router_server.go#L249](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server.go#L249)
+- [router/router_server.go#L298](https://github.com/pastanetwork/wings/blob/develop/router/router_server.go#L298)

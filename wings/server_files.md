@@ -19,7 +19,7 @@ Returns the file contents of a specified file in the server's volume. The `Conte
 
 Sources:
 
-- [router/router_server_files.go#L31](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server_files.go#L31)
+- [router/router_server_files.go#L33](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go#L33)
 
 ### `GET /api/servers/:uuid/files/list-directory`
 
@@ -41,7 +41,7 @@ Returns a list of file objects in the directory of the server's volume.
 
 Sources:
 
-- [router/router_server_files.go#L78](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server_files.go#L78)
+- [router/router_server_files.go#L92](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go#L92)
 
 ### `PUT /api/servers/:uuid/files/rename`
 
@@ -78,7 +78,7 @@ Renames one or more files in the server's volume.
 
 Sources:
 
-- [router/router_server_files.go#L94](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server_files.go#L94)
+- [router/router_server_files.go#L116](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go#L116)
 
 ### `POST /api/servers/:uuid/files/copy`
 
@@ -99,7 +99,7 @@ Creates a copy of the file at the given location in the server volume.
 
 Sources:
 
-- [router/router_server_files.go#L163](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server_files.go#L163)
+- [router/router_server_files.go#L184](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go#L184)
 
 ### `POST /api/servers/:uuid/files/write`
 
@@ -120,7 +120,7 @@ Writes the given file content into a file in the server's volume. If the file do
 
 Sources:
 
-- [router/router_server_files.go#L232](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server_files.go#L232)
+- [router/router_server_files.go#L253](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go#L253)
 
 ### `POST /api/servers/:uuid/files/create-directory`
 
@@ -142,7 +142,7 @@ Creates a directory at a given path in the server's volume.
 
 Sources:
 
-- [router/router_server_files.go#L363](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server_files.go#L363)
+- [router/router_server_files.go#L393](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go#L393)
 
 ### `POST /api/servers/:uuid/files/delete`
 
@@ -165,7 +165,7 @@ Deletes one or more files from the server's volume. Note that if one of the file
 
 Sources:
 
-- [router/router_server_files.go#L187](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server_files.go#L187)
+- [router/router_server_files.go#L208](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go#L208)
 
 ### `POST /api/servers/:uuid/files/compress`
 
@@ -188,7 +188,7 @@ Compresses one or more files into a single archive in the server's volume, and r
 
 Sources:
 
-- [router/router_server_files.go#L390](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server_files.go#L390)
+- [router/router_server_files.go#L420](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go#L420)
 
 ### `POST /api/servers/:uuid/files/decompress`
 
@@ -210,7 +210,7 @@ Decompresses an archive file into the server's volume.
 
 Sources:
 
-- [router/router_server_files.go#L431](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server_files.go#L431)
+- [router/router_server_files.go#L461](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go#L461)
 
 ### `POST /api/servers/:uuid/files/chmod`
 
@@ -247,7 +247,7 @@ Changes the permissions of a file in the server's volume.
 
 Sources:
 
-- [router/router_server_files.go#L479](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server_files.go#L479)
+- [router/router_server_files.go#L509](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go#L509)
 
 ### `GET /api/servers/:uuid/files/pull`
 
@@ -255,7 +255,7 @@ Returns an object containing a list of download objects for in-progress download
 
 Sources:
 
-- [router/router_server_files.go#L261](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server_files.go#L261)
+- [router/router_server_files.go#L291](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go#L291)
 
 ### `POST /api/servers/:uuid/files/pull`
 
@@ -285,8 +285,8 @@ Pulls a file from a remote location and downloads it into the server's volume. A
 
 Sources:
 
-- [router/router_server_files.go#L269](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server_files.go#L269)
-- [downloader/downloader.go](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/downloader/downloader.go)
+- [router/router_server_files.go#L299](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go#L299)
+- [downloader/downloader.go](https://github.com/pastanetwork/wings/blob/develop/router/downloader/downloader.go)
 
 ### `DELETE /api/servers/:uuid/files/pull/:id`
 
@@ -294,4 +294,454 @@ Deletes an in-progress remote file download.
 
 Sources:
 
-- [router/router_server_files.go#L354](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_server_files.go#L354)
+- [router/router_server_files.go#L384](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go#L384)
+
+### `GET /api/servers/:uuid/files/search`
+
+Performs a recursive search for files matching a given pattern in the server's volume. Supports wildcards, substring matching, and extension-based searches.
+
+### Parameters
+
+| Name      | Visibility | Description                                                    |
+| --------- | ---------- | -------------------------------------------------------------- |
+| directory | optional   | The URL-encoded directory path to search in (defaults to "/"). |
+| pattern   | required   | The search pattern (minimum 3 characters).                     |
+
+### Responses
+
+| Code | Description                                                           |
+| ---- | --------------------------------------------------------------------- |
+| 200  | The request was successful.                                           |
+| 400  | The pattern is too short (less than 3 characters) or directory error. |
+
+### Example Response
+
+```json
+[
+  {
+    "name": "config/settings.json",
+    "created": "2025-01-15T10:30:00Z",
+    "modified": "2025-01-18T14:22:00Z",
+    "mode": "-rw-r--r--",
+    "mode_bits": "0644",
+    "size": 2048,
+    "directory": false,
+    "file": true,
+    "symlink": false,
+    "mime": "application/json"
+  }
+]
+```
+
+Sources:
+
+- [router/router_server_files_search.go](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files_search.go)
+
+### `GET /api/servers/:uuid/files/stat`
+
+Returns file metadata without reading the file contents. Useful for getting file information quickly without the overhead of downloading content.
+
+### Parameters
+
+| Name | Visibility | Description                |
+| ---- | ---------- | -------------------------- |
+| file | required   | The URL-encoded file path. |
+
+### Responses
+
+| Code | Description                 |
+| ---- | --------------------------- |
+| 200  | The request was successful. |
+| 404  | The file was not found.     |
+
+### Example Response
+
+```json
+{
+  "name": "server.jar",
+  "created": "2025-01-15T10:00:00Z",
+  "modified": "2025-01-18T14:30:00Z",
+  "mode": "-rw-r--r--",
+  "mode_bits": "0644",
+  "size": 52428800,
+  "directory": false,
+  "file": true,
+  "symlink": false,
+  "mime": "application/java-archive"
+}
+```
+
+Sources:
+
+- [router/router_server_files.go](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go)
+
+### `POST /api/servers/:uuid/files/touch`
+
+Creates an empty file at the specified path in the server's volume.
+
+### Body
+
+| Field | Visibility | Type   | Description          |
+| ----- | ---------- | ------ | -------------------- |
+| path  | required   | string | The file path to create. |
+
+### Example Body
+
+```json
+{
+  "path": "/logs/new.log"
+}
+```
+
+### Responses
+
+| Code | Description                                                        |
+| ---- | ------------------------------------------------------------------ |
+| 204  | The request was accepted.                                          |
+| 400  | The request body could not be parsed, or the file path is invalid. |
+
+Sources:
+
+- [router/router_server_files.go](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go)
+
+### `GET /api/servers/:uuid/files/disk-usage`
+
+Returns disk usage and quota information for the server. Results are cached for 30 seconds to improve performance.
+
+### Responses
+
+| Code | Description                 |
+| ---- | --------------------------- |
+| 200  | The request was successful. |
+
+### Example Response
+
+```json
+{
+  "current_bytes": 1073741824,
+  "limit_bytes": 10737418240
+}
+```
+
+Sources:
+
+- [router/router_server_files.go](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go)
+
+### `GET /api/servers/:uuid/files/lines`
+
+Returns specific lines from a file without loading the entire file into memory. Useful for viewing portions of large log files.
+
+### Parameters
+
+| Name  | Visibility | Description                              |
+| ----- | ---------- | ---------------------------------------- |
+| file  | required   | The URL-encoded file path.               |
+| start | required   | The starting line number (1-indexed).    |
+| end   | required   | The ending line number (inclusive).      |
+
+### Responses
+
+| Code | Description                                                                      |
+| ---- | -------------------------------------------------------------------------------- |
+| 200  | The request was successful.                                                      |
+| 400  | The file path is missing, or too many lines requested (maximum 500 lines).       |
+| 404  | The file was not found.                                                          |
+
+### Example Response
+
+```json
+{
+  "file": "/logs/server.log",
+  "start_line": 1000,
+  "end_line": 1100,
+  "total_lines": 50000,
+  "lines": [
+    {"number": 1000, "content": "[INFO] Server started"},
+    {"number": 1001, "content": "[WARN] Memory usage high"}
+  ]
+}
+```
+
+Sources:
+
+- [router/router_server_files_partial.go](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files_partial.go)
+
+### `GET /api/servers/:uuid/files/metadata`
+
+Returns detailed metadata about a file including encoding, line endings, and line count.
+
+### Parameters
+
+| Name | Visibility | Description                |
+| ---- | ---------- | -------------------------- |
+| file | required   | The URL-encoded file path. |
+
+### Responses
+
+| Code | Description                 |
+| ---- | --------------------------- |
+| 200  | The request was successful. |
+| 404  | The file was not found.     |
+
+### Example Response
+
+```json
+{
+  "file": "/logs/big.log",
+  "size": 524288000,
+  "total_lines": 5000000,
+  "encoding": "utf-8",
+  "line_ending": "LF",
+  "created": "2025-01-15T10:00:00Z",
+  "modified": "2025-01-19T14:30:00Z"
+}
+```
+
+Sources:
+
+- [router/router_server_files_partial.go](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files_partial.go)
+
+### `POST /api/servers/:uuid/files/replace-line`
+
+Replaces a specific line in a file with new content.
+
+### Body
+
+| Field       | Visibility | Description                         |
+| ----------- | ---------- | ----------------------------------- |
+| file        | required   | The file path (not encoded).        |
+| line_number | required   | The line number to replace (1-indexed). |
+| content     | required   | The new content for the line.       |
+
+### Example Body
+
+```json
+{
+  "file": "/config/server.properties",
+  "line_number": 42,
+  "content": "max-players=100"
+}
+```
+
+### Responses
+
+| Code | Description                                                  |
+| ---- | ------------------------------------------------------------ |
+| 204  | The request was accepted.                                    |
+| 400  | The request body could not be parsed, or line number is out of range. |
+| 404  | The file was not found.                                      |
+
+Sources:
+
+- [router/router_server_files_partial.go](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files_partial.go)
+
+### `POST /api/servers/:uuid/files/insert-lines`
+
+Inserts one or more lines at a specific position in a file.
+
+### Body
+
+| Field       | Visibility | Description                                   |
+| ----------- | ---------- | --------------------------------------------- |
+| file        | required   | The file path (not encoded).                  |
+| line_number | required   | The line number to insert before (1-indexed). |
+| lines       | required   | An array of lines to insert.                  |
+
+### Example Body
+
+```json
+{
+  "file": "/config/whitelist.txt",
+  "line_number": 10,
+  "lines": ["player1", "player2", "player3"]
+}
+```
+
+### Responses
+
+| Code | Description                                                  |
+| ---- | ------------------------------------------------------------ |
+| 204  | The request was accepted.                                    |
+| 400  | The request body could not be parsed, or line number is out of range. |
+| 404  | The file was not found.                                      |
+
+Sources:
+
+- [router/router_server_files_partial.go](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files_partial.go)
+
+### `POST /api/servers/:uuid/files/delete-lines`
+
+Deletes a range of lines from a file.
+
+### Body
+
+| Field      | Visibility | Description                         |
+| ---------- | ---------- | ----------------------------------- |
+| file       | required   | The file path (not encoded).        |
+| start_line | required   | The starting line number (1-indexed). |
+| end_line   | required   | The ending line number (inclusive). |
+
+### Example Body
+
+```json
+{
+  "file": "/logs/old.log",
+  "start_line": 1,
+  "end_line": 1000
+}
+```
+
+### Responses
+
+| Code | Description                                                  |
+| ---- | ------------------------------------------------------------ |
+| 204  | The request was accepted.                                    |
+| 400  | The request body could not be parsed, or line range is invalid. |
+| 404  | The file was not found.                                      |
+
+Sources:
+
+- [router/router_server_files_partial.go](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files_partial.go)
+
+### `POST /api/servers/:uuid/files/upload/init`
+
+Initializes a chunked upload session for large files. Returns an upload ID that should be used for subsequent chunk uploads.
+
+### Body
+
+| Field      | Visibility | Description                                |
+| ---------- | ---------- | ------------------------------------------ |
+| path       | required   | The destination file path (not encoded).   |
+| file_size  | required   | The total size of the file in bytes.       |
+| chunk_size | required   | The size of each chunk in bytes.           |
+
+### Example Body
+
+```json
+{
+  "path": "/mods/big-modpack.zip",
+  "file_size": 524288000,
+  "chunk_size": 10485760
+}
+```
+
+### Responses
+
+| Code | Description                                                                                     |
+| ---- | ----------------------------------------------------------------------------------------------- |
+| 200  | The request was successful.                                                                     |
+| 400  | The request body could not be parsed, or file size exceeds maximum allowed size.                |
+| 409  | Maximum concurrent uploads reached for this server.                                             |
+
+### Example Response
+
+```json
+{
+  "upload_id": "550e8400-e29b-41d4-a716-446655440000",
+  "total_chunks": 50,
+  "chunk_size": 10485760
+}
+```
+
+Sources:
+
+- [router/router_server_files_upload.go](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files_upload.go)
+
+### `POST /api/servers/:uuid/files/upload/chunk`
+
+Uploads a single chunk of data for an active upload session. Chunks can be uploaded in any order.
+
+### Headers
+
+| Name            | Visibility | Description                           |
+| --------------- | ---------- | ------------------------------------- |
+| Content-Type    | required   | Must be "application/octet-stream".   |
+| X-Upload-Id     | required   | The upload session ID.                |
+| X-Chunk-Index   | required   | The chunk index (0-based).            |
+| X-Total-Chunks  | required   | The total number of chunks.           |
+
+### Body
+
+Binary data of the chunk.
+
+### Responses
+
+| Code | Description                                                           |
+| ---- | --------------------------------------------------------------------- |
+| 200  | The request was successful.                                           |
+| 400  | Missing required headers or invalid chunk index.                      |
+| 404  | Upload session not found.                                             |
+| 403  | Upload session does not belong to this server.                        |
+
+### Example Response
+
+```json
+{
+  "chunk_index": 0,
+  "status": "received",
+  "bytes_received": 10485760,
+  "total_bytes": 524288000,
+  "progress": 2.0
+}
+```
+
+Sources:
+
+- [router/router_server_files_upload.go](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files_upload.go)
+
+### `POST /api/servers/:uuid/files/upload/finalize`
+
+Finalizes an upload session by assembling all received chunks into the final file. Verifies all chunks are present and computes a SHA256 checksum.
+
+### Body
+
+| Field     | Visibility | Description            |
+| --------- | ---------- | ---------------------- |
+| upload_id | required   | The upload session ID. |
+
+### Example Body
+
+```json
+{
+  "upload_id": "550e8400-e29b-41d4-a716-446655440000"
+}
+```
+
+### Responses
+
+| Code | Description                                                  |
+| ---- | ------------------------------------------------------------ |
+| 200  | The request was successful.                                  |
+| 400  | Not all chunks have been received.                           |
+| 404  | Upload session not found.                                    |
+| 403  | Upload session does not belong to this server.               |
+
+### Example Response
+
+```json
+{
+  "status": "completed",
+  "file_path": "/mods/big-modpack.zip",
+  "file_size": 524288000,
+  "checksum": "sha256:a3b5c7d9e1f2a4b6c8d0e2f4a6b8c0d2e4f6a8b0c2d4e6f8a0b2c4d6e8f0a2b4"
+}
+```
+
+Sources:
+
+- [router/router_server_files_upload.go](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files_upload.go)
+
+### `DELETE /api/servers/:uuid/files/upload/:upload_id`
+
+Cancels an active upload session and removes all stored chunks.
+
+### Responses
+
+| Code | Description                                        |
+| ---- | -------------------------------------------------- |
+| 204  | The request was accepted.                          |
+| 403  | Upload session does not belong to this server.     |
+
+Sources:
+
+- [router/router_server_files_upload.go](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files_upload.go)

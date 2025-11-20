@@ -21,12 +21,12 @@ Updates the Wings configuration.
 
 | Code | Description                             |
 | ---- | --------------------------------------- |
-| 204  | The request was accepted.               |
+| 200  | The request was successful.             |
 | 400  | The configuration could not be updated. |
 
 Sources:
 
-- [router/router_system.go#L117](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_system.go#L117)
+- [router/router_system.go#L121](https://github.com/pastanetwork/wings/blob/develop/router/router_system.go#L121)
 
 ### `GET /api/system`
 
@@ -98,7 +98,7 @@ Returns the system information for the host that Wings is running on.
 
 Sources:
 
-- [router/router_system.go#L20](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_system.go#L20)
+- [router/router_system.go#L20](https://github.com/pastanetwork/wings/blob/develop/router/router_system.go#L20)
 
 ### `GET /api/servers`
 
@@ -108,11 +108,11 @@ Returns a HTTP 200 response with a list of server objects (separate from the ser
 
 Sources:
 
-- [router/router_system.go#L49](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_system.go#L49)
+- [router/router_system.go#L49](https://github.com/pastanetwork/wings/blob/develop/router/router_system.go#L49)
 
 ### `POST /api/servers`
 
-Creates a server on the node and begins the installation process for it.
+Creates a server on the node and begins the installation process for it. The installation process runs in the background.
 
 ### Body
 
@@ -125,13 +125,13 @@ Creates a server on the node and begins the installation process for it.
 
 | Code | Description                              |
 | ---- | ---------------------------------------- |
-| 204  | The request was accepted.                |
+| 202  | The request was accepted.                |
 | 400  | The request body could not be parsed.    |
 | 422  | The request body could not be validated. |
 
 Sources:
 
-- [router/router_system.go#L60](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_system.go#L60)
+- [router/router_system.go#L60](https://github.com/pastanetwork/wings/blob/develop/router/router_system.go#L60)
 
 ### `DELETE /api/transfers/:uuid`
 
@@ -141,9 +141,9 @@ Cancels an incoming server transfer request.
 
 | Code | Description                          |
 | ---- | ------------------------------------ |
-| 204  | The request was accepted.            |
-| 400  | The server is not being transferred. |
+| 202  | The request was accepted.            |
+| 409  | The server is not being transferred. |
 
 Sources:
 
-- [router/router_transfer.go#L252](https://github.com/pterodactyl/wings/blob/release/v1.11.2/router/router_transfer.go#L252)
+- [router/router_transfer.go#L253](https://github.com/pastanetwork/wings/blob/develop/router/router_transfer.go#L253)
