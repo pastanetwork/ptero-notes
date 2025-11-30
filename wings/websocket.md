@@ -40,6 +40,9 @@ Websocket payloads will always have the event name, but the event arguments can 
 
 | Name                     | Arguments            | Description                                                |
 | ------------------------ | -------------------- | ---------------------------------------------------------- |
+| archive completed        | task info JSON       | Sent when an archive task (compress/decompress) completes. |
+| archive failed           | task info JSON       | Sent when an archive task fails (includes error).          |
+| archive started          | task info JSON       | Sent when an archive task starts.                          |
 | auth success             |                      | The authentication was successful.                         |
 | backup complete          |                      | Sent when a backup is complete.                            |
 | backup deleted           |                      | Sent when a backup has been deleted.                       |
@@ -60,6 +63,42 @@ Websocket payloads will always have the event name, but the event arguments can 
 | token expiring           |                      | Warning event: you should reauthenticate the connection.   |
 | transfer logs            | the output log       | The logs from the transfer process.                        |
 | transfer status          | the transfer state   | The current transfer status.                               |
+
+### Archive Events
+
+The archive events are sent when async compress/decompress operations are used (foreground=false). The task info JSON contains:
+
+```json
+{
+  "identifier": "550e8400-e29b-41d4-a716-446655440000",
+  "type": "compress",
+  "root_path": "/"
+}
+```
+
+For `archive completed` on compress operations, the result includes the file info:
+
+```json
+{
+  "identifier": "550e8400-e29b-41d4-a716-446655440000",
+  "type": "compress",
+  "result": {
+    "name": "archive-2025-01-20T103000.tar.gz",
+    "size": 1048576,
+    "mime": "application/tar+gzip"
+  }
+}
+```
+
+For `archive failed`, the error is included:
+
+```json
+{
+  "identifier": "550e8400-e29b-41d4-a716-446655440000",
+  "type": "decompress",
+  "error": "archive format not supported"
+}
+```
 
 ## Heartbeating
 

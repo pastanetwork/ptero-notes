@@ -82,13 +82,13 @@ Sources:
 
 ### `POST /api/servers/:uuid/files/copy`
 
-Creates a copy of the file at the given location in the server volume.
+Creates a copy of a file or directory at the given location in the server volume. For directories, performs a recursive copy of all contents. Symlinks are skipped for security.
 
 ### Body
 
-| Field    | Visibility | Type   | Description                  |
-| -------- | ---------- | ------ | ---------------------------- |
-| location | required   | string | The file path (not encoded). |
+| Field    | Visibility | Type   | Description                           |
+| -------- | ---------- | ------ | ------------------------------------- |
+| location | required   | string | The file or directory path (not encoded). |
 
 ### Responses
 
@@ -169,48 +169,170 @@ Sources:
 
 ### `POST /api/servers/:uuid/files/compress`
 
-Compresses one or more files into a single archive in the server's volume, and returned the file object of the new archive.
+Compresses one or more files into a single archive in the server's volume. By default runs synchronously (foreground=true). When foreground=false, returns immediately with a task identifier and the compression runs in the background. Listen to WebSocket events for completion.
 
 ### Body
 
-| Field | Visibility | Type            | Description                      |
-| ----- | ---------- | --------------- | -------------------------------- |
-| files | required   | array of string | A list of file names.            |
-| root  | required   | string          | The root directory of the files. |
+| Field      | Visibility | Type            | Description                                              |
+| ---------- | ---------- | --------------- | -------------------------------------------------------- |
+| files      | required   | array of string | A list of file names.                                    |
+| root       | required   | string          | The root directory of the files.                         |
+| foreground | optional   | boolean         | If true (default), wait for completion. If false, async. |
 
 ### Responses
 
-| Code | Description                                   |
-| ---- | --------------------------------------------- |
-| 200  | The request was successful.                   |
-| 400  | The request body could not be parsed.         |
-| 422  | The files list in the request body was empty. |
+| Code | Description                                        |
+| ---- | -------------------------------------------------- |
+| 200  | The request was successful (foreground mode).      |
+| 202  | Task accepted, returns identifier (async mode).    |
+| 400  | The request body could not be parsed.              |
+| 422  | The files list in the request body was empty.      |
+
+### Example Response (foreground=false)
+
+```json
+{
+  "identifier": "550e8400-e29b-41d4-a716-446655440000"
+}
+```
+
+### WebSocket Events (async mode)
+
+- `archive started` - When compression begins
+- `archive completed` - When compression finishes successfully (includes result file info)
+- `archive failed` - If compression fails (includes error message)
 
 Sources:
 
 - [router/router_server_files.go#L420](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go#L420)
+- [router/archiver/archiver.go](https://github.com/pastanetwork/wings/blob/develop/router/archiver/archiver.go)
 
 ### `POST /api/servers/:uuid/files/decompress`
 
-Decompresses an archive file into the server's volume.
+Decompresses an archive file into the server's volume. By default runs synchronously (foreground=true). When foreground=false, returns immediately with a task identifier and the decompression runs in the background. Listen to WebSocket events for completion.
 
 ### Body
 
-| Field | Visibility | Type   | Description                     |
-| ----- | ---------- | ------ | ------------------------------- |
-| file  | required   | string | The name of the archive file.   |
-| root  | required   | string | The root directory of the file. |
+| Field      | Visibility | Type    | Description                                              |
+| ---------- | ---------- | ------- | -------------------------------------------------------- |
+| file       | required   | string  | The name of the archive file.                            |
+| root       | required   | string  | The root directory of the file.                          |
+| foreground | optional   | boolean | If true (default), wait for completion. If false, async. |
 
 ### Responses
 
 | Code | Description                                                                                                                   |
 | ---- | ----------------------------------------------------------------------------------------------------------------------------- |
-| 204  | The request was accepted.                                                                                                     |
+| 204  | The request was accepted (foreground mode).                                                                                   |
+| 202  | Task accepted, returns identifier (async mode).                                                                               |
 | 400  | The request body could not be parsed, the archive could not be processed, or the file is currently in use by another process. |
+
+### Example Response (foreground=false)
+
+```json
+{
+  "identifier": "550e8400-e29b-41d4-a716-446655440000"
+}
+```
+
+### WebSocket Events (async mode)
+
+- `archive started` - When decompression begins
+- `archive completed` - When decompression finishes successfully
+- `archive failed` - If decompression fails (includes error message)
 
 Sources:
 
 - [router/router_server_files.go#L461](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go#L461)
+- [router/archiver/archiver.go](https://github.com/pastanetwork/wings/blob/develop/router/archiver/archiver.go)
+
+### `GET /api/servers/:uuid/files/archive-tasks`
+
+Returns a list of all archive tasks (compress/decompress) for the server. Tasks are automatically cleaned up 5 minutes after completion.
+
+### Responses
+
+| Code | Description                 |
+| ---- | --------------------------- |
+| 200  | The request was successful. |
+
+### Example Response
+
+```json
+[
+  {
+    "identifier": "550e8400-e29b-41d4-a716-446655440000",
+    "server_id": "abc123-def456",
+    "type": "compress",
+    "status": "processing",
+    "root_path": "/",
+    "files": ["logs", "config"],
+    "started_at": "2025-01-20T10:30:00Z"
+  },
+  {
+    "identifier": "660e8400-e29b-41d4-a716-446655440001",
+    "server_id": "abc123-def456",
+    "type": "decompress",
+    "status": "completed",
+    "root_path": "/mods",
+    "file": "modpack.tar.gz",
+    "started_at": "2025-01-20T10:25:00Z",
+    "finished_at": "2025-01-20T10:28:00Z"
+  }
+]
+```
+
+Sources:
+
+- [router/router_server_files.go](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go)
+- [router/archiver/archiver.go](https://github.com/pastanetwork/wings/blob/develop/router/archiver/archiver.go)
+
+### `GET /api/servers/:uuid/files/archive-status/:identifier`
+
+Returns the status of a specific archive task by its identifier.
+
+### Parameters
+
+| Name       | Visibility | Description                                               |
+| ---------- | ---------- | --------------------------------------------------------- |
+| identifier | required   | The task identifier returned by compress/decompress.      |
+
+### Responses
+
+| Code | Description                 |
+| ---- | --------------------------- |
+| 200  | The request was successful. |
+| 404  | The task was not found.     |
+
+### Example Response
+
+```json
+{
+  "identifier": "550e8400-e29b-41d4-a716-446655440000",
+  "server_id": "abc123-def456",
+  "type": "compress",
+  "status": "completed",
+  "root_path": "/",
+  "files": ["logs", "config"],
+  "result_file": "archive-2025-01-20T103000.tar.gz",
+  "started_at": "2025-01-20T10:30:00Z",
+  "finished_at": "2025-01-20T10:32:00Z"
+}
+```
+
+### Task Status Values
+
+| Status     | Description                          |
+| ---------- | ------------------------------------ |
+| pending    | Task created but not yet started.    |
+| processing | Task is currently running.           |
+| completed  | Task finished successfully.          |
+| failed     | Task failed (check `error` field).   |
+
+Sources:
+
+- [router/router_server_files.go](https://github.com/pastanetwork/wings/blob/develop/router/router_server_files.go)
+- [router/archiver/archiver.go](https://github.com/pastanetwork/wings/blob/develop/router/archiver/archiver.go)
 
 ### `POST /api/servers/:uuid/files/chmod`
 
@@ -381,15 +503,15 @@ Creates an empty file at the specified path in the server's volume.
 
 ### Body
 
-| Field | Visibility | Type   | Description          |
-| ----- | ---------- | ------ | -------------------- |
-| path  | required   | string | The file path to create. |
+| Field | Visibility | Type   | Description              |
+| ----- | ---------- | ------ | ------------------------ |
+| file  | required   | string | The file path to create. |
 
 ### Example Body
 
 ```json
 {
-  "path": "/logs/new.log"
+  "file": "/logs/new.log"
 }
 ```
 
